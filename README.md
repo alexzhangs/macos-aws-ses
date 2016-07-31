@@ -3,14 +3,14 @@
 Setup sendmail to use AWS SES Service send Email on MacOS.
 Tested on Mac OS X 10.11.
 
-# Installation
+## Installation
 
 ```
 git clone https://github.com/alexzhangs/macos-aws-ses
 sudo sh macos-aws-ses/install.sh
 ```
 
-# Usage
+## Usage
 
 ```
 macos-aws-ses-setup
