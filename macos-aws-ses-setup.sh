@@ -93,6 +93,7 @@ EOF
 echo "Generating /etc/postfix/sasl_passwd.db"
 rm -f /etc/postfix/sasl_passwd.db || exit
 postmap /etc/postfix/sasl_passwd || exit
+chmod 0600 /etc/postfix/sasl_passwd || exit
 chmod 0600 /etc/postfix/sasl_passwd.db || exit
 
 # Restart Sendmail service
