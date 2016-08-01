@@ -34,7 +34,7 @@ usage () {
     exit 255
 }
 
-while getopts d:r:u:p:m:t:h opt; do
+while getopts d:r:u:p:t:h opt; do
     case $opt in
         d)
             SES_DOMAIN=$OPTARG
@@ -47,9 +47,6 @@ while getopts d:r:u:p:m:t:h opt; do
             ;;
         p)
             SMTP_PASSWORD=$OPTARG
-            ;;
-        m)
-            SMTP_AUTH_METHOD=$OPTARG
             ;;
         t)
             TEST_EMAIL_SEND_TO=$OPTARG
