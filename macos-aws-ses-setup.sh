@@ -4,6 +4,7 @@
 
 usage () {
     printf "Setup Sendmail to use AWS SES SMTP server on MacOS.\n"
+    printf "Use sudo to run this script as root.\n"
 	printf "${0##*/}\n"
     printf "\t-d SES_DOMAIN\n"
     printf "\t-r REGION\n"
@@ -110,4 +111,4 @@ This is a test Email sent from MacOS through AWS SES SMTP service.
 EOF
 fi
 
-exit $?
+exit
