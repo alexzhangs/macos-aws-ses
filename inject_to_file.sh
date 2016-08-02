@@ -123,8 +123,7 @@ fi
 # Injecting
 case ${position:?} in
     begin)
-        sed -i '' "1
-{
+        sed -i '' "1{
 h
 r ${tmp_inj_file:?}
 g
@@ -138,8 +137,7 @@ N
         sed -i '' -E "/${regex_after:?}/ r ${tmp_inj_file:?}" "${tmp_file:?}" || clean_exit $?
         ;;
     before)
-        sed -i '' -E "/${regex_before:?}/
-{
+        sed -i '' -E "/${regex_before:?}/{
 h
 r ${tmp_inj_file:?}
 g
