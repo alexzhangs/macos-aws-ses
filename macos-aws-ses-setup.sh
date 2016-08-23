@@ -100,9 +100,9 @@ postmap /etc/postfix/sasl_passwd || exit
 chmod 0600 /etc/postfix/sasl_passwd || exit
 chmod 0600 /etc/postfix/sasl_passwd.db || exit
 
-# Restart Sendmail service
-postfix stop
-postfix start || exit
+# Restart postfix service
+launchctl stop org.postfix.master
+launchctl start org.postfix.master
 
 # Send test Email to verify the installation
 if [[ -n $TEST_EMAIL_SEND_TO ]]; then
