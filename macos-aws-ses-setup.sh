@@ -1,6 +1,14 @@
 #!/bin/bash
 
-[[ DEBUG -gt 0 ]] && set -x
+set -o pipefail -e
+
+# Debug
+if [[ $DEBUG -gt 0 ]]; then
+    set -x
+else
+    set +x
+fi
+
 
 PROGNAME=${0##*/}
 PROGNAME=${PROGNAME%.*}
@@ -85,20 +93,20 @@ inject_to_file -c "$config" -f /etc/postfix/main.cf \
                -m "$mark_begin" \
                -n "$mark_end" \
                -x "$mark_begin" \
-               -y "$mark_end" || exit
+               -y "$mark_end"
 
 # /etc/postfix/sasl_passwd
 echo "Modifying /etc/postfix/sasl_passwd"
-cat > /etc/postfix/sasl_passwd << EOF || exit
+cat > /etc/postfix/sasl_passwd << EOF
 [email-smtp.${REGION}.amazonaws.com]:25 ${SMTP_USERNAME}:${SMTP_PASSWORD}
 EOF
 
 # /etc/postfix/sasl_passwd.db
 echo "Generating /etc/postfix/sasl_passwd.db"
-rm -f /etc/postfix/sasl_passwd.db || exit
-postmap /etc/postfix/sasl_passwd || exit
-chmod 0600 /etc/postfix/sasl_passwd || exit
-chmod 0600 /etc/postfix/sasl_passwd.db || exit
+rm -f /etc/postfix/sasl_passwd.db
+postmap /etc/postfix/sasl_passwd
+chmod 0600 /etc/postfix/sasl_passwd
+chmod 0600 /etc/postfix/sasl_passwd.db
 
 # Restart postfix service
 launchctl stop org.postfix.master
