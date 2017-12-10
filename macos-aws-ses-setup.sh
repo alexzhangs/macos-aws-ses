@@ -13,6 +13,16 @@ fi
 PROGNAME=${0##*/}
 PROGNAME=${PROGNAME%.*}
 
+get_postfix_service_name () {
+    if launchctl list org.postfix.master >/dev/null 2>&1; then
+        echo org.postfix.master
+    elif launchctl list com.apple.postfix.master >/dev/null 2>&1; then
+        echo com.apple.postfix.master
+    else
+        return 255
+    fi
+}
+
 usage () {
     printf "Setup Sendmail to use AWS SES SMTP server on MacOS.\n"
     printf "Use sudo to run this script as root.\n"
@@ -109,8 +119,14 @@ chmod 0600 /etc/postfix/sasl_passwd
 chmod 0600 /etc/postfix/sasl_passwd.db
 
 # Restart postfix service
-launchctl stop org.postfix.master
-launchctl start org.postfix.master
+service_name=$(get_postfix_service_name)
+if [[ -n $service_name ]]; then
+    launchctl stop $service_name
+    launchctl start $service_name
+else
+    echo "Failed to get postfix service name"
+    exit 255
+fi
 
 # Send test Email to verify the installation
 if [[ -n $TEST_EMAIL_SEND_TO ]]; then
