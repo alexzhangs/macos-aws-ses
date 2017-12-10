@@ -87,13 +87,13 @@ smtp_sasl_mechanism_filter = plain
 
 # /etc/postfix/main.cf
 echo "Modifying /etc/postfix/main.cf"
-inject_to_file -c "$config" -f /etc/postfix/main.cf \
-               -p after \
-               -a "^#relayhost = \[an.ip.add.ress\]$" \
-               -m "$mark_begin" \
-               -n "$mark_end" \
-               -x "$mark_begin" \
-               -y "$mark_end"
+inject -c "$config" -f /etc/postfix/main.cf \
+       -p after \
+       -a "^#relayhost = \[an.ip.add.ress\]$" \
+       -m "$mark_begin" \
+       -n "$mark_end" \
+       -x "$mark_begin" \
+       -y "$mark_end"
 
 # /etc/postfix/sasl_passwd
 echo "Modifying /etc/postfix/sasl_passwd"
@@ -115,7 +115,7 @@ launchctl start org.postfix.master
 # Send test Email to verify the installation
 if [[ -n $TEST_EMAIL_SEND_TO ]]; then
     echo "Sending test Email to $TEST_EMAIL_SEND_TO"
-    sendmail -F "${PROGNAME}" -f "no-reply@$SES_DOMAIN" -t "$TEST_EMAIL_SEND_TO" << EOF
+    sendmail -F "$PROGNAME" -f "no-reply@$SES_DOMAIN" -t << EOF
 Subject: ${PROGNAME} test Email
 To: $TEST_EMAIL_SEND_TO
 This is a test Email sent from MacOS through AWS SES SMTP service.
