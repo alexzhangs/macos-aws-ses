@@ -48,8 +48,7 @@ usage () {
     printf "\t-c CONTENT\n"
     printf "\t-f FILE\n"
     printf "\t-p <begin|end|after|before>\n"
-    printf "\t[-a REGEX]\n"
-    printf "\t[-b REGEX]\n"
+    printf "\t[-e REGEX]\n"
     printf "\t[-m MARK_BEGIN]\n"
     printf "\t[-n MARK_END]\n"
     printf "\t[-x REGEX_MARK_BEGIN]\n"
@@ -66,11 +65,8 @@ usage () {
     printf "\t-p <begin|end|after|before>\n\n"
     printf "\tWhere to inject in the FILE.\n\n"
 
-    printf "\t[-a REGEX]\n\n"
-    printf "\tUse together with '-p after'.\n\n"
-
-    printf "\t[-b REGEX]\n\n"
-    printf "\tUse together with '-p before'.\n\n"
+    printf "\t[-e REGEX]\n\n"
+    printf "\tUse together with -p.\n\n"
 
     printf "\t[-m MARK_BEGIN]\n\n"
     printf "\tUse together with -n.\n"
@@ -93,7 +89,7 @@ usage () {
     exit 255
 }
 
-while getopts c:f:p:a:b:m:n:x:y:h opt; do
+while getopts c:f:p:e:m:n:x:y:h opt; do
     case $opt in
         c)
             content=$OPTARG
@@ -105,11 +101,8 @@ while getopts c:f:p:a:b:m:n:x:y:h opt; do
             # begin, end, after, before
             position=$OPTARG
             ;;
-        a)
-            regex_after=$OPTARG
-            ;;
-        b)
-            regex_before=$OPTARG
+        e)
+            regex=$OPTARG
             ;;
         m)
             mark_begin=$OPTARG
@@ -162,26 +155,28 @@ fi
 # Injecting
 case ${position:?} in
     begin)
-        sed_inplace "1{
-h
-r ${tmp_inj_file:?}
-g
-N
-}" "${tmp_file:?}"
+        sed_inplace \
+            "1 {
+            h
+            r ${tmp_inj_file:?}
+            g
+            N
+            }" "${tmp_file:?}"
         ;;
     end)
         sed_inplace "$ r ${tmp_inj_file:?}" "${tmp_file:?}"
         ;;
     after)
-        sed_regx_inplace "/${regex_after:?}/ r ${tmp_inj_file:?}" "${tmp_file:?}"
+        sed_regx_inplace "/${regex:?}/ r ${tmp_inj_file:?}" "${tmp_file:?}"
         ;;
     before)
-        sed_regx_inplace "/${regex_before:?}/{
-h
-r ${tmp_inj_file:?}
-g
-N
-}" "${tmp_file:?}"
+        sed_regx_inplace \
+            "/${regex:?}/ {
+            h
+            r ${tmp_inj_file:?}
+            g
+            N
+            }" "${tmp_file:?}"
         ;;
     *)
         exit 255

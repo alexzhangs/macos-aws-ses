@@ -99,7 +99,7 @@ smtp_sasl_mechanism_filter = plain
 echo "Modifying /etc/postfix/main.cf"
 inject -c "$config" -f /etc/postfix/main.cf \
        -p after \
-       -a "^#relayhost = \[an.ip.add.ress\]$" \
+       -e "^#relayhost = \[an.ip.add.ress\]$" \
        -m "$mark_begin" \
        -n "$mark_end" \
        -x "$mark_begin" \
