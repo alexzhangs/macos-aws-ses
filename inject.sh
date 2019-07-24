@@ -183,6 +183,6 @@ case ${position:?} in
         ;;
 esac
 
-cp -a "${tmp_file:?}" "${file:?}"
+/bin/cp -a "${tmp_file:?}" "${file:?}"
 
 exit
