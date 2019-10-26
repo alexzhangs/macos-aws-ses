@@ -1,5 +1,7 @@
 # macos-aws-ses
 
+## **This project is depracated and the feature is moved to project xsh-lib/aws, and can be called as xsh ses/ec2/setup.**
+
 Setup sendmail to use AWS SES Service send Email on macOS.
 
 Tested on macOS High Sierra.
